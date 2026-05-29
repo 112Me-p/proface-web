@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="description" content="Proface E-Catalog — ผ้าม่านสวย Window Treatment มู่ลี่ ม่านม้วน ฉากกั้นห้อง"/>
+<meta property="og:title" content="PROFACE E-Catalog"/>
+<meta property="og:description" content="คอลเลคชั่นผ้าม่านครบทุกประเภท — Roller Blind, Blackout, Sheer, Wooden Blind และอีกมากมาย"/>
+<meta property="og:image" content="images/Hero-bg.jpg"/>
+<meta property="og:type" content="website"/>
+<title>PROFACE — E-Catalog</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --bg:       #111009;
+  --card:     #1c1a16;
+  --card2:    #242018;
+  --border:   rgba(255,255,255,0.07);
+  --cream:    #ede5d8;
+  --muted:    #9a8f82;
+  --gold:     #c9a96e;
+  --gold-dim: rgba(201,169,110,0.15);
+  --pill-bg:  rgba(255,255,255,0.08);
+}
+
+body {
+  background: var(--bg);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding-bottom: 72px; /* space for sticky bar */
+}
+
+/* ─── PAGE WRAPPER ─── */
+.page {
+  max-width: 430px;
+  margin: 0 auto;
+  padding-bottom: 32px;
+}
+
+/* ─── RESPONSIVE BREAKPOINTS ─── */
+@media (min-width: 640px) {
+  .page { max-width: 720px; }
+  .catalog-grid { grid-template-columns: 1fr 1fr 1fr; }
+  .hero { height: 380px; }
+}
+
+@media (min-width: 1024px) {
+  .page { max-width: 1100px; }
+  .catalog-grid { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .hero { height: 440px; }
+  .hero-title { font-size: 56px; }
+  .filter-row { padding: 28px 24px 8px; }
+  .section-head { padding: 32px 24px 14px; }
+  .catalog-grid { padding: 0 18px; gap: 14px; }
+}
+
+/* ─── HERO ─── */
+.hero {
+  position: relative;
+  height: 340px;
+  overflow: hidden;
+  border-radius: 0 0 32px 32px;
+}
+
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.15) 0%,
+    rgba(10,8,5,0.3) 40%,
+    rgba(10,8,5,0.82) 100%
+  );
+}
+
+.hero-content {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  padding: 0 24px 28px;
+}
+
+.hero-label {
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.hero-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 42px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--cream);
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.6);
+}
+
+.hero-sub {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(237,229,216,0.55);
+  margin-top: 6px;
+}
+
+/* ─── FILTER PILLS ─── */
+.filter-row {
+  display: flex;
+  gap: 8px;
+  padding: 20px 20px 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.filter-row::-webkit-scrollbar { display: none; }
+
+.pill {
+  flex-shrink: 0;
+  padding: 7px 16px;
+  border-radius: 100px;
+  background: var(--pill-bg);
+  border: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.pill.active {
+  background: var(--gold-dim);
+  border-color: rgba(201,169,110,0.4);
+  color: var(--gold);
+}
+
+/* ─── SECTION ─── */
+.section-head {
+  padding: 24px 20px 12px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--cream);
+  letter-spacing: -0.2px;
+}
+
+.section-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+  letter-spacing: 0.02em;
+}
+
+.catalog-section {
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.catalog-section.hidden {
+  display: none;
+}
+
+/* ─── CATALOG GRID ─── */
+.catalog-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 14px;
+}
+
+/* ─── CARD ─── */
+.cat-card {
+  display: block;
+  text-decoration: none;
+  border-radius: 22px;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--border);
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cat-card:active { transform: scale(0.97); }
+
+.cat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+  border-color: rgba(201,169,110,0.25);
+}
+
+/* Card image */
+.card-img-wrap {
+  position: relative;
+  height: 150px;
+  overflow: hidden;
+  background: #1a1714;
+}
+
+.card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.cat-card:hover .card-img-wrap img { transform: scale(1.04); }
+
+/* Gradient over image */
+.card-img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 40%, rgba(10,8,5,0.75) 100%);
+  pointer-events: none;
+}
+
+/* Badge on image */
+.card-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 100px;
+  padding: 4px 10px;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: rgba(237,229,216,0.8);
+}
+
+/* Card info */
+.card-info {
+  padding: 12px 14px 14px;
+}
+
+.card-tag {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+
+.card-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--cream);
+  line-height: 1.3;
+}
+
+.card-en {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.card-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 100px;
+  padding: 5px 10px 5px 8px;
+  font-size: 10px;
+  color: var(--muted);
+  transition: background 0.2s;
+}
+
+.cat-card:hover .card-arrow {
+  background: var(--gold-dim);
+  color: var(--gold);
+}
+
+/* ─── DIVIDER ─── */
+.section-divider {
+  margin: 28px 20px 0;
+  height: 0.5px;
+  background: rgba(255,255,255,0.07);
+}
+
+/* ─── FOOTER ─── */
+.footer {
+  text-align: center;
+  padding: 36px 20px 0;
+}
+
+.footer-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  color: rgba(237,229,216,0.25);
+  letter-spacing: 0.15em;
+}
+
+.footer-copy {
+  font-size: 9px;
+  color: rgba(154,143,130,0.35);
+  letter-spacing: 0.1em;
+  margin-top: 6px;
+}
+
+/* ─── STICKY CONTACT BAR ─── */
+.sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0; right: 0;
+  z-index: 100;
+  padding: 10px 16px 14px;
+  background: rgba(17,16,9,0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+@media (min-width: 640px) {
+  .sticky-bar { justify-content: center; }
+  .sticky-bar a { min-width: 180px; }
+}
+
+.contact-btn {
+  flex: 1;
+  max-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 16px;
+  border-radius: 14px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.contact-btn:active { transform: scale(0.97); opacity: 0.85; }
+
+.btn-tel {
+  background: var(--gold-dim);
+  border: 1px solid rgba(201,169,110,0.35);
+  color: var(--gold);
+}
+
+.btn-line {
+  background: rgba(0,185,0,0.12);
+  border: 1px solid rgba(0,185,0,0.3);
+  color: #4cd964;
+}
+
+.btn-icon {
+  font-size: 16px;
+}
+
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ─── HERO ─── -->
+  <div class="hero">
+    <img class="hero-img" src="images/Hero-bg.jpg" alt="Proface Window Treatment"/>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-label">E-Catalog 2025</span>
+      <div class="hero-title">Proface</div>
+      <div class="hero-sub">ม่านสวย · Window Treatment</div>
+    </div>
+  </div>
+
+  <!-- ─── FILTER PILLS ─── -->
+  <div class="filter-row">
+    <div class="pill active" data-filter="all">ทั้งหมด</div>
+    <div class="pill" data-filter="curtain">ผ้าม่าน</div>
+    <div class="pill" data-filter="blind">มู่ลี่ &amp; ม่านม้วน</div>
+    <div class="pill" data-filter="special">คอลเลคชั่นพิเศษ</div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SECTION 1: ผ้าม่าน
+  ══════════════════════════════════════ -->
+  <div class="catalog-section" data-section="curtain">
+    <div class="section-head">
+      <div class="section-title">ผ้าม่าน</div>
+      <div class="section-sub">Curtain Collection</div>
+    </div>
+    <div class="catalog-grid">
+
+      <!-- Sheer -->
+      <a class="cat-card" href="https://online.fliphtml5.com/ieqni/wppz/" target="_blank" rel="noreferrer noopener">
+        <div class="card-img-wrap">
+          <img src="images/sheer-cover.jpg" alt="ผ้าม่านโปร่ง Sheer"/>
+          <span class="card-badge">SHEER</span>
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Curtain</div>
+          <div class="card-name">ผ้าม่านโปร่ง</div>
+          <div class="card-en">Sheer Fabric</div>
+          <div class="card-arrow">📖 เปิด Catalog</div>
+        </div>
+      </a>
+
+      <!-- Dimout -->
+      <a class="cat-card" href="https://online.fliphtml5.com/ieqni/ttwd/" target="_blank" rel="noreferrer noopener">
+        <div class="card-img-wrap">
+          <img src="images/dimout-cover.jpg" alt="ผ้าม่านกรองแสง Dimout"/>
+          <span class="card-badge">DIMOUT</span>
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Curtain</div>
+          <div class="card-name">ผ้าม่านกรองแสง</div>
+          <div class="card-en">Dimout Fabric</div>
+          <div class="card-arrow">📖 เปิด Catalog</div>
+        </div>
+      </a>
+
+      <!-- Blackout -->
+      <a class="cat-card" href="https://online.fliphtml5.com/ieqni/tfwb/" target="_blank" rel="noreferrer noopener">
+        <div class="card-img-wrap">
+          <img src="images/blackout-cover.jpg" alt="ผ้าม่านกันแสง Blackout"/>
+          <span class="card-badge">BLACKOUT</span>
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Curtain</div>
+          <div class="card-name">ผ้าม่านกันแสง</div>
+          <div class="card-en">Blackout Fabric</div>
+          <div class="card-arrow">📖 เปิด Catalog</div>
+        </div>
+      </a>
+
+      <!-- Natural -->
+      <a class="cat-card" href="https://online.fliphtml5.com/ieqni/lqsq/" target="_blank" rel="noreferrer noopener">
+        <div class="card-img-wrap">
+          <img src="images/natural-cover.jpg" alt="ผ้าม่านเนื้อธรรมชาติ Natural"/>
+          <span class="card-badge">NATURAL</span>
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Curtain</div>
+          <div class="card-name">ผ้าม่านธรรมชาติ</div>
+          <div class="card-en">Natural Fabric</div>
+          <div class="card-arrow">📖 เปิด Catalog</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="section-divider" data-divider="blind"></div>
+
+  <!-- ══════════════════════════════════════
+       SECTION 2: มู่ลี่ & ม่านม้วน
+  ══════════════════════════════════════ -->
+  <div class="catalog-section" data-section="blind">
+    <div class="section-head">
+      <div class="section-title">มู่ลี่ &amp; ม่านม้วน</div>
+      <div class="section-sub">Blinds Collection</div>
+    </div>
+    <div class="catalog-grid">
+
+      <!-- Roller Blind -->
+      <a class="cat-card" href="https://online.fliphtml5.com/ieqni/wlth/" target="_blank" rel="noreferrer noopener">
+        <div class="card-img-wrap">
+          <img src="images/roller-cover.jpg" alt="ม่านม้วน Roller Blind"/>
+          <span class="card-badge">ROLLER</span>
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Blind</div>
+          <div class="card-name">ม่านม้วน</div>
+          <div class="card-en">Roller Blind</div>
+          <div class="card-arrow">📖 เปิด Catalog</div>
+        </div>
+      </a>
+
+      <!-- Wooden Blind -->
+      <a class="cat-card" href="https://online.fliphtml5.com/ieqni/ksah/" target="_blank" rel="noreferrer noopener">
+        <div class="card-img-wrap">
+          <img src="images/wooden-cover.jpg" alt="มู่ลี่ไม้ Wooden Blind"/>
+          <span class="card-badge">WOODEN</span>
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Blind</div>
+          <div class="card-name">มู่ลี่ไม้</div>
+          <div class="card-en">Wooden Blind</div>
+          <div class="card-arrow">📖 เปิด Catalog</div>
+        </div>
+      </a>
+
+      <!-- Vertical Blind -->
+      <a class="cat-card" href="https://online.fliphtml5.com/ieqni/qwaw/" target="_blank" rel="noreferrer noopener">
+        <div class="card-img-wrap">
+          <img src="images/vertical-cover.jpg" alt="ม่านปรับแสง Vertical Blind"/>
+          <span class="card-badge">VERTICAL</span>
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Blind</div>
+          <div class="card-name">ม่านปรับแสง</div>
+          <div class="card-en">Vertical Blind</div>
+          <div class="card-arrow">📖 เปิด Catalog</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="section-divider" data-divider="special"></div>
+
+  <!-- ══════════════════════════════════════
+       SECTION 3: คอลเลคชั่นพิเศษ
+  ══════════════════════════════════════ -->
+  <div class="catalog-section" data-section="special">
+    <div class="section-head">
+      <div class="section-title">คอลเลคชั่นพิเศษ</div>
+      <div class="section-sub">Special Collections</div>
+    </div>
+    <div class="catalog-grid">
+
+      <!-- Pet Friendly -->
+      <a class="cat-card" href="https://online.fliphtml5.com/ieqni/ghlr/" target="_blank" rel="noreferrer noopener">
+        <div class="card-img-wrap">
+          <img src="images/pet-cover.jpg" alt="ผ้าม่านกันรอยขีดข่วน Pet Friendly"/>
+          <span class="card-badge">PET</span>
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Special</div>
+          <div class="card-name">Pet Friendly</div>
+          <div class="card-en">Scratch Resistant</div>
+          <div class="card-arrow">📖 เปิด Catalog</div>
+        </div>
+      </a>
+
+      <!-- Wellness -->
+      <a class="cat-card" href="https://online.fliphtml5.com/ieqni/cely/" target="_blank" rel="noreferrer noopener">
+        <div class="card-img-wrap">
+          <img src="images/wellness-cover.jpg" alt="ผ้าม่านเพื่อสุขภาพ Wellness"/>
+          <span class="card-badge">WELLNESS</span>
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Special</div>
+          <div class="card-name">Wellness</div>
+          <div class="card-en">Health Fabric</div>
+          <div class="card-arrow">📖 เปิด Catalog</div>
+        </div>
+      </a>
+
+      <!-- Hospital -->
+      <a class="cat-card" href="https://online.fliphtml5.com/ieqni/bexu/" target="_blank" rel="noreferrer noopener">
+        <div class="card-img-wrap">
+          <img src="images/hospital-cover.jpg" alt="ผ้าม่านโรงพยาบาล Hospital"/>
+          <span class="card-badge">HOSPITAL</span>
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Special</div>
+          <div class="card-name">ผ้าม่านโรงพยาบาล</div>
+          <div class="card-en">Hospital Grade</div>
+          <div class="card-arrow">📖 เปิด Catalog</div>
+        </div>
+      </a>
+
+      <!-- Folding Door -->
+      <a class="cat-card" href="https://online.fliphtml5.com/ieqni/fszz/" target="_blank" rel="noreferrer noopener">
+        <div class="card-img-wrap">
+          <img src="images/folding-cover.jpg" alt="ฉากกั้นห้อง Folding Door"/>
+          <span class="card-badge">FOLDING</span>
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Special</div>
+          <div class="card-name">ฉากกั้นห้อง</div>
+          <div class="card-en">Folding Door</div>
+          <div class="card-arrow">📖 เปิด Catalog</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ─── FOOTER ─── -->
+  <div class="footer">
+    <div class="footer-logo">PROFACE</div>
+    <div class="footer-copy">© 2025 Proface Corporation · ม่านสวยโปรเฟส</div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- ─── STICKY CONTACT BAR ─── -->
+<div class="sticky-bar">
+  <a class="contact-btn btn-tel" href="tel:0834623979">
+    <span class="btn-icon">📞</span>
+    <span>083-462-3979</span>
+  </a>
+  <a class="contact-btn btn-line" href="https://line.me/R/ti/p/@proface" target="_blank" rel="noreferrer noopener">
+    <span class="btn-icon">💬</span>
+    <span>LINE: @proface</span>
+  </a>
+</div>
+
+<script>
+  // ── Filter Pills ──
+  const pills = document.querySelectorAll('.pill');
+  const sections = document.querySelectorAll('.catalog-section');
+  const dividers = document.querySelectorAll('.section-divider');
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const filter = pill.dataset.filter;
+
+      // Update active pill
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      // Show/hide sections
+      sections.forEach(sec => {
+        if (filter === 'all' || sec.dataset.section === filter) {
+          sec.classList.remove('hidden');
+        } else {
+          sec.classList.add('hidden');
+        }
+      });
+
+      // Show/hide dividers
+      dividers.forEach(div => {
+        if (filter === 'all') {
+          div.style.display = '';
+        } else {
+          div.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
